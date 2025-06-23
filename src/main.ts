@@ -1,7 +1,8 @@
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { ElMessage } from 'element-plus'
+import "@/assets/styles/reset.css"
+import "@/assets/styles/global.css"
 
 import App from './App.vue'
 import router from './router'
