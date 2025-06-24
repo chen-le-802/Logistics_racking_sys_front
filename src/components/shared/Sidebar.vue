@@ -3,32 +3,46 @@
         <div class="menu">
             <ul>
                 <li
-                    :class="{ active: $route.path ==='/search' }"
-                    @click="$router.push('/search')"
-                ><el-icon><Search /></el-icon>运单查询</li>
-                <li
-                    :class="{ active: $route.path ==='/order' }"
-                    @click="$router.push('/order')"
-                ><el-icon><Position /></el-icon>我要寄件</li>
-                <li
-                    :class="{ active: $route.path ==='/user-info'}"
-                    @click="$router.push('/user-info')"
-                ><el-icon><User /></el-icon>我的资料</li>
+                    v-for="item in navList"
+                    :key="item.path"
+                    :class="{ active: $route.path === item.path }"
+                    @click="$router.push(item.path)"
+                >
+                    <el-icon style="width:15px">
+                        <component :is="icons[item.icon]" />
+                    </el-icon>
+                    {{ item.lable }}
+                </li>
             </ul>
         </div>
     </div>
 </template>
-<script lang="ts" setup>
-import { ref } from 'vue';
-import { ElIcon } from 'element-plus';
-import { Search, Position, User } from '@element-plus/icons-vue';
 
-const activeIndex = ref(0);
+<script lang="ts" setup>
+import { ElIcon } from 'element-plus'
+import { Search, Position, User } from '@element-plus/icons-vue'
+import { defineProps } from 'vue'
+
+const props = defineProps<{
+    navList: Array<{
+        lable: string,
+        path: string,
+        icon: string
+    }>
+}>()
+
+const icons: Record<string, any> = {
+    Search,
+    Position,
+    User
+}
 </script>
+
 <style scoped lang="css">
 .sidebar{
     width:275px;
     height: calc(100vh - 60px);
+    overflow: auto;
     background-color: #fff;
     font-weight: 500;
 }
