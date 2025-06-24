@@ -4,12 +4,12 @@
         <div class="left">
             <div class="logo-title">
                 <div class="logo"></div>
-                <p class="title">货了么</p>
+                <p class="title" @click="$router.push('/search')">货了么</p>
             </div>
         </div>
         <div class="right">
             <div class="message"><el-icon><BellFilled color="#1A76F3"/></el-icon></div>
-            <div class="user-info">欢迎您: <span class="phone-number">187****0502</span></div>
+            <div class="user-info">欢迎您: <span class="phone-number" @click="$router.push('/user-info')">187****0502</span></div>
         </div>
     </header>
     </div>

@@ -3,16 +3,16 @@
         <div class="menu">
             <ul>
                 <li
-                    :class="{ active: activeIndex === 0 }"
-                    @click="activeIndex = 0"
+                    :class="{ active: $route.path ==='/search' }"
+                    @click="$router.push('/search')"
                 ><el-icon><Search /></el-icon>运单查询</li>
                 <li
-                    :class="{ active: activeIndex === 1 }"
-                    @click="activeIndex = 1"
+                    :class="{ active: $route.path ==='/order' }"
+                    @click="$router.push('/order')"
                 ><el-icon><Position /></el-icon>我要寄件</li>
                 <li
-                    :class="{ active: activeIndex === 2 }"
-                    @click="activeIndex = 2"
+                    :class="{ active: $route.path ==='/user-info'}"
+                    @click="$router.push('/user-info')"
                 ><el-icon><User /></el-icon>我的资料</li>
             </ul>
         </div>
