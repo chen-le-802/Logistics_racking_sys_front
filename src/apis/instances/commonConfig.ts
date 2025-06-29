@@ -4,9 +4,9 @@ import { ElMessage } from 'element-plus';
 
 //通用请求配置
 const commonRequestConfig: AxiosRequestConfig = {
-    baseURL:"/",
+    baseURL:"http://localhost:8080/",
     timeout: 10000,
-    //withCredentials: true,
+    withCredentials: true,
 };
 
 //通用请求拦截器
@@ -15,10 +15,10 @@ const commonRequestInterceptors:RequestInterceptor[]=[
         onFulfilled:(config: AxiosRequestConfig) => {
             const token = localStorage.getItem('token');
             if (token) {
-                config.headers = {
-                    ...config.headers,
-                    Authorization: `Bearer ${token}`,
-                };
+                if (!config.headers) {
+                    config.headers = {};
+                }
+                config.headers.Authorization = token;
             }
             return config;
         },
@@ -52,6 +52,12 @@ const commonResponseInterceptors:ResponseInterceptor[]=[
             const { response } =error;
             let message = '';
             const status = response?.status;
+            if (status == 401) {
+                if (localStorage.getItem('token')) {
+                    localStorage.removeItem('token')
+                    window.location.reload()
+                }
+            }
             switch (status) {
                 case 401:
                 message = 'token 失效，请重新登录';

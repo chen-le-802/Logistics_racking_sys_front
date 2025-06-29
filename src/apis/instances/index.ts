@@ -5,12 +5,18 @@ const baseInstance = createInstance({}, [], []);
 
 // 例子：Shop业务可能前缀都是/shop，可以在这里统一处理，
 // 如果需要对请求和返回做特殊处理，也可以在这里加拦截器
-const shopInstance = createInstance(
+const orderInstance = createInstance(
   {
-    baseURL: '/shop',
+    baseURL: 'http://localhost:8080',
   },
   [],
   []
 );
-
-export { baseInstance, shopInstance };
+const userInstance = createInstance(
+  {
+    baseURL: 'http://localhost:8080/user',
+  },
+  [],
+  []
+);
+export { baseInstance, orderInstance,userInstance };

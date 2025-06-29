@@ -1,9 +1,27 @@
-<script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+<script lang="ts" setup>
+import { ref, onMounted, onUnmounted, computed } from "vue";
 import AMapLoader from "@amap/amap-jsapi-loader";
 
-let map = null;
-const logisticsInfo = ref({
+let map: any = null;
+
+const props = defineProps<{
+  stringOrderId: string
+}>();
+
+const orderId = computed(() => BigInt(props.stringOrderId));
+
+interface LogisticsStep {
+  time: string;
+  location: string;
+  status: string;
+}
+interface LogisticsInfo {
+  status: string;
+  currentLocation: string;
+  estimatedTime: string;
+  steps: LogisticsStep[];
+}
+const logisticsInfo = ref<LogisticsInfo>({
   status: "运输中",
   currentLocation: "北京市朝阳区",
   estimatedTime: "2023-12-20 18:00前",
@@ -16,12 +34,13 @@ const logisticsInfo = ref({
 });
 
 // 物流路线坐标点（上海到北京）
-const routePath = [
+const routePath: [number, number][] = [
   [121.4737, 31.2304], // 上海
   [116.4074, 39.9042]  // 北京
 ];
 
 onMounted(() => {
+  // @ts-ignore
   window._AMapSecurityConfig = {
     securityJsCode: "76f474ae5205d86d65a7334103cf47b3",
   };
@@ -30,59 +49,53 @@ onMounted(() => {
     version: "2.0",
     plugins: [
       "AMap.Scale",
-      "AMap.Driving", // 路线规划插件
-      "AMap.Marker",  // 点标记插件
-      "AMap.Polyline" // 折线插件
+      "AMap.Driving",
+      "AMap.Marker",
+      "AMap.Polyline"
     ],
   })
-    .then((AMap) => {
+    .then((AMap: any) => {
       map = new AMap.Map("container", {
         viewMode: "3D",
-        zoom: 5, // 缩小级别以显示完整路线
-        center: [117.5, 36], // 居中显示在上海和北京之间
+        zoom: 5,
+        center: [117.5, 36],
       });
-      
-      // 添加比例尺
+
       map.addControl(new AMap.Scale());
-      
-      // 绘制物流路线
+
       const polyline = new AMap.Polyline({
         path: routePath,
-        strokeColor: "#3366FF", // 线颜色
-        strokeWeight: 5,       // 线宽
-        strokeStyle: "solid",  // 线样式
+        strokeColor: "#3366FF",
+        strokeWeight: 5,
+        strokeStyle: "solid",
       });
       map.add([polyline]);
-      
-      // 添加起点和终点标记
+
       const startMarker = new AMap.Marker({
         position: routePath[0],
         content: '<div class="marker start-marker">起</div>',
         offset: new AMap.Pixel(-10, -10)
       });
-      
+
       const endMarker = new AMap.Marker({
         position: routePath[1],
         content: '<div class="marker end-marker">终</div>',
         offset: new AMap.Pixel(-10, -10)
       });
-      
+
       map.add([startMarker, endMarker]);
-      
-      // 添加物流节点标记
+
       logisticsInfo.value.steps.forEach((step, index) => {
-        // 简单模拟位置，实际应用中应该使用真实坐标
-        const position = index < 2 ? 
+        const position: [number, number] = index < 2 ?
           [routePath[0][0] + Math.random() * 0.5, routePath[0][1] + Math.random() * 0.5] :
           [routePath[1][0] + Math.random() * 0.5, routePath[1][1] + Math.random() * 0.5];
-          
+
         const marker = new AMap.Marker({
           position: position,
           content: `<div class="marker step-marker">${index + 1}</div>`,
           offset: new AMap.Pixel(-10, -10)
         });
-        
-        // 添加信息窗口
+
         marker.on('click', () => {
           const infoWindow = new AMap.InfoWindow({
             content: `<div class="info-window">
@@ -95,18 +108,16 @@ onMounted(() => {
           });
           infoWindow.open(map, position);
         });
-        
+
         map.add(marker);
       });
-      
-      // 自动定位到当前物流位置（最后一个节点）
-      const lastStep = logisticsInfo.value.steps[logisticsInfo.value.steps.length - 1];
+
       map.setZoomAndCenter(12, [
-        routePath[1][0] + Math.random() * 0.1, 
+        routePath[1][0] + Math.random() * 0.1,
         routePath[1][1] + Math.random() * 0.1
       ]);
     })
-    .catch((e) => {
+    .catch((e: any) => {
       console.log(e);
     });
 });
@@ -119,7 +130,6 @@ onUnmounted(() => {
 <template>
   <div class="logistics-container">
     <div id="container"></div>
-    
     <div class="logistics-info">
       <h3>物流信息</h3>
       <div class="status-bar">
@@ -127,7 +137,6 @@ onUnmounted(() => {
         <div class="location">当前位置: {{ logisticsInfo.currentLocation }}</div>
         <div class="time">预计送达: {{ logisticsInfo.estimatedTime }}</div>
       </div>
-      
       <div class="timeline">
         <div 
           v-for="(step, index) in logisticsInfo.steps" 

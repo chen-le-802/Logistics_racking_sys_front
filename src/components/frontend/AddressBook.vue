@@ -14,14 +14,20 @@
         </div>
 
         <!-- 地址列表 -->
-        <el-table :data="pagedAddresses" border style="width: 100%">
+        <el-table 
+            :data="pagedAddresses" 
+            border 
+            style="width: 100%"
+            @row-click="handleRowClick"
+        >
+            <el-table-column type="selection" width="55" />
             <el-table-column prop="name" label="联系人" width="120" />
             <el-table-column prop="phone" label="联系方式" width="150" />
             <el-table-column prop="address" label="地址" />
             <el-table-column label="操作" width="150">
                 <template #default="{ row }">
-                    <el-button size="small" @click="handleEdit(row)">编辑</el-button>
-                    <el-button size="small" type="danger" @click="handleDelete(row)">删除</el-button>
+                    <el-button size="small" @click.stop="handleEdit(row)">编辑</el-button>
+                    <el-button size="small" type="danger" @click.stop="handleDelete(row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -57,22 +63,27 @@
                 </span>
             </template>
         </el-dialog>
+        
         <el-dialog
-    v-model="deleteDialogVisible"
-    title="确认删除"
-    width="30%"
-    style="margin-top: 300px;"
-    center
->
-    <span>确定要删除该地址吗？</span>
-    <template #footer>
-        <span class="dialog-footer">
-            <el-button @click="cancelDelete">取消</el-button>
-            <el-button type="danger" @click="confirmDelete">删除</el-button>
-        </span>
-    </template>
-</el-dialog>
-
+            v-model="deleteDialogVisible"
+            title="确认删除"
+            width="30%"
+            style="margin-top: 300px;"
+            center
+        >
+            <span>确定要删除该地址吗？</span>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="cancelDelete">取消</el-button>
+                    <el-button type="danger" @click="confirmDelete">删除</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        
+        <!-- 添加确认选择按钮 -->
+        <div class="selection-actions" v-if="showSelection">
+            <el-button type="primary" @click="confirmSelection">确认选择</el-button>
+        </div>
     </div>
 </template>
 
@@ -85,6 +96,15 @@ interface Address {
     phone: string
     address: string
 }
+// 定义props和emits
+const props = defineProps({
+    showSelection: {
+        type: Boolean,
+        default: false
+    }
+})
+
+const emit = defineEmits(['select', 'update:modelValue'])
 
 // 模拟数据
 const mockAddresses: Address[] = [
@@ -112,8 +132,22 @@ const isEditing = ref(false)
 //删除对话框相关状态
 const deleteDialogVisible = ref(false)
 const addressToDelete = ref<Address | null>(null)
+const selectedAddress = ref<Address | null>(null) // 新增：选中的地址
 
+// 行点击事件
+const handleRowClick = (row: Address) => {
+    if (props.showSelection) {
+        selectedAddress.value = row
+    }
+}
 
+// 确认选择
+const confirmSelection = () => {
+    if (selectedAddress.value) {
+        emit('select', selectedAddress.value)
+        emit('update:modelValue', selectedAddress.value)
+    }
+}
 
 // 计算属性
 const filteredAddresses = computed(() => {

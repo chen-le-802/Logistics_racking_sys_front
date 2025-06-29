@@ -7,14 +7,21 @@
             <!-- 展示模式 -->
             <div v-if="!isEditing" class="info-display">
                 <div class="info-item">
+                    <span class="label">姓名：</span>
+                    <span class="value">{{ userInfo.name || '未填写' }}</span>
+                </div>
+                <div class="info-item">
                     <span class="label">手机号码：</span>
                     <span class="value">{{ userInfo.phone || '未填写' }}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">性别：</span>
-                    <span class="value">{{ displayGender }}</span>
+                    <span class="label">邮箱：</span>
+                    <span class="value">{{ userInfo.email || '未填写' }}</span>
                 </div>
-                <el-button class="info-item" style="width:100px;" @click="showAddressBookModal">我的地址簿</el-button>
+                <div class="info-item">
+                    <span class="label">角色：</span>
+                    <span class="value">{{ displayRole }}</span>
+                </div>
                 <div style="margin-top:20px">
                     <el-button type="primary" @click="startEditing" style="width:100px;align-self: center;margin-top: 30px;margin-right: 30px;">修改信息</el-button>
                     <el-button type="danger" @click="confirmExitLogin" style="width:100px;align-self: center;margin-top: 30px;">退出登录</el-button>
@@ -30,6 +37,19 @@
                 label-width="80px"
             >
                 <el-form-item 
+                    label="姓名" 
+                    prop="name"
+                    class="form-item"
+                >
+                    <el-input 
+                        v-model="userInfo.name" 
+                        placeholder="请输入姓名" 
+                        class="input-box" 
+                        clearable
+                    />
+                </el-form-item>
+                
+                <el-form-item 
                     label="手机号码" 
                     prop="phone"
                     class="form-item"
@@ -43,14 +63,16 @@
                 </el-form-item>
                 
                 <el-form-item 
-                    label="性别" 
-                    prop="gender"
+                    label="邮箱" 
+                    prop="email"
                     class="form-item"
                 >
-                    <el-radio-group v-model="userInfo.gender">
-                        <el-radio :label="1">男</el-radio>
-                        <el-radio :label="2">女</el-radio>
-                    </el-radio-group>
+                    <el-input 
+                        v-model="userInfo.email" 
+                        placeholder="请输入邮箱" 
+                        class="input-box" 
+                        clearable
+                    />
                 </el-form-item>
                 
                 <el-form-item class="form-actions">
@@ -67,27 +89,32 @@
                 <el-button type="primary" @click="handleConfirmDialog">确定</el-button>
             </template>
         </el-dialog>
-        <el-dialog v-model="modalVisible"   width="1000px" style="height: 600px;" center>
-            <h2 style="margin-bottom: 20px;color:black">我的地址簿</h2>
-            <AddressBook></AddressBook>
-        </el-dialog>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, computed } from 'vue';
+import { reactive, ref, computed, onMounted } from 'vue';
+import {userApi} from '@/apis/modules'
 
 const title = '我的信息';
 const isEditing = ref(false);
 const userInfoForm = ref();
+const userRole = ref('user')
 
 const userInfo = reactive({
-    phone: '13800138000',
-    gender: 1
+    name: '',
+    phone: '',
+    email: '',
+    gender: 1,
+    role: 0
 });
 
-const displayGender = computed(() => {
-    return userInfo.gender === 1 ? '男' : '女';
+const getUserRole = () => {
+    userRole.value = localStorage.getItem('userRole') || 'user'
+}
+
+const displayRole = computed(() => {
+    return userInfo.role === 1 ? '快递员' : '普通用户';
 });
 
 // 确认对话框状态
@@ -101,7 +128,6 @@ const confirmDialog = reactive({
 const startEditing = () => {
     isEditing.value = true;
 };
-const modalVisible = ref(false)
 
 const cancelEditing = () => {
     isEditing.value = false;
@@ -114,10 +140,11 @@ const confirmExitLogin = () => {
     confirmDialog.visible = true;
 };
 
-const exitLogin = () => {
+const exitLogin = async () => {
+    await userApi.logout(localStorage.getItem('token') || '');
     localStorage.removeItem('token');
-    // 可跳转到登录页
-    // window.location.href = '/login';
+    window.location.reload()
+    
 };
 
 const confirmSaveInfo = () => {
@@ -141,9 +168,18 @@ const handleConfirmDialog = () => {
     }
     confirmDialog.visible = false;
 };
-const showAddressBookModal = () => {
-    modalVisible.value = true
-}
+
+
+const fetchUserInfo = async () => {
+    const response = await userApi.getUserInfo();
+
+        Object.assign(userInfo, response);
+};
+
+onMounted(() => {
+    getUserRole();
+    fetchUserInfo();
+});
 </script>
 
 <style lang="css" scoped>
