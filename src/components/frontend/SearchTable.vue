@@ -172,8 +172,6 @@ const fetchOrderList = async () => {
         ElMessage.error('获取订单列表异常')
         tableData.value = []
         pagination.value.total = 0
-    } finally {
- 
     }
 }
 
@@ -203,7 +201,7 @@ const currentRow = ref(null)
 const detailModalVisible = ref(false)
 const selectedOrderId = ref('')
 const currentDetail = ref({
-    orderId: BigInt,
+    orderId: '',
     senderName: '',
     senderPhone: '',
     senderAddr: '',
@@ -244,51 +242,6 @@ const resetDialog = () => {
     dialogTitle.value = ''
     dialogContent.value = ''
 }
-
-// const confirmReceipt = async () => {
-//     if (!currentRow.value) {
-//         dialogVisible.value = false
-//         return
-//     }
-//     try {
-//         const res = await confirmOrderReceipt(currentRow.value.orderId)
-//         if (res.code === 0) {
-//             ElMessage.success('确认收货成功')
-//             fetchOrderList()
-//         } else {
-//             ElMessage.error(res.message || '确认收货失败')
-//         }
-//     } catch {
-//         ElMessage.error('确认收货异常')
-//     } finally {
-//         dialogVisible.value = false
-//         resetDialog()
-//     }
-// }
-
-// const deleteRow = async () => {
-//     if (!currentRow.value) {
-//         dialogVisible.value = false
-//         return
-//     }
-//     try {
-//         const res = await deleteOrder(currentRow.value.orderId)
-//         if (res.code === 0) {
-//             ElMessage.success('删除订单成功')
-//             if (tableData.value.length === 1 && pagination.value.current > 1) {
-//                 pagination.value.current -= 1
-//             }
-//             fetchOrderList()
-//         } else {
-//             ElMessage.error(res.message || '删除订单失败')
-//         }
-//     } catch {
-//         ElMessage.error('删除订单异常')
-//     } finally {
-//         dialogVisible.value = false
-//         resetDialog()
-//     }
-// }
 
 const handleSelectionChange = selection => {
     // 可扩展多选逻辑

@@ -11,6 +11,7 @@ declare module 'vue' {
     AddressBook: typeof import('./src/components/frontend/AddressBook.vue')['default']
     AddressForm: typeof import('./src/components/frontend/AddressForm.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
     ElDescriptions: typeof import('element-plus/es')['ElDescriptions']
     ElDescriptionsItem: typeof import('element-plus/es')['ElDescriptionsItem']
     ElDialog: typeof import('element-plus/es')['ElDialog']
@@ -38,8 +39,5 @@ declare module 'vue' {
     SearchTable: typeof import('./src/components/frontend/SearchTable.vue')['default']
     Sidebar: typeof import('./src/components/shared/Sidebar.vue')['default']
     TitleBox: typeof import('./src/components/shared/TitleBox.vue')['default']
-  }
-  export interface GlobalDirectives {
-    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

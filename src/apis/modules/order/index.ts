@@ -9,19 +9,19 @@ const addOrder = (params: AddOrderParams) => {
 const getOrder = (params: GetOrdersParams) => {
   return get<BaseResponse<OrdersData>>('/order', params);
 };
-const getOrderById = (orderId: BigInt | string) => {
+const getOrderById = (orderId: string) => {
   return get<BaseResponse<OrdersData>>(`/order/${orderId}`);
 };
 interface ChangePayStatusParams {
-  orderId: string | number | BigInt;
-  paystatus: number;
+  orderId: string;
+  payStatus: number;
 }
 
 const changePayStatus = (
-  orderId: ChangePayStatusParams['orderId'],
-  paystatus: ChangePayStatusParams['paystatus']
+  orderId: string,
+  payStatus: number
 ) => {
-  return put<BaseResponse<EmptyData>>(`/order/${orderId}`, { paystatus });
+  return put<BaseResponse<EmptyData>>(`/order/${orderId}/pay-status`, { payStatus });
 };
 
 export {addOrder,getOrder,getOrderById,changePayStatus};

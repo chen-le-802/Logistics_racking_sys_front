@@ -331,7 +331,7 @@ const handleConfirmPayment = () => {
 }
 
 const changePayStatu = async () => {
-    await orderApi.changePayStatus(BigInt(orderId.value),1)
+    await orderApi.changePayStatus(orderId.value, 1)
 }
 
 // 取消支付处理

@@ -8,7 +8,8 @@ const props = defineProps<{
   stringOrderId: string
 }>();
 
-const orderId = computed(() => BigInt(props.stringOrderId));
+// 直接用字符串，不再转 BigInt
+const orderId = computed(() => props.stringOrderId);
 
 interface LogisticsStep {
   time: string;
