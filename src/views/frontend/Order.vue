@@ -293,7 +293,7 @@ const submitOrder = async () => {
         
         const response = await orderApi.addOrder(body)
         fee.value = response.fee
-        orderId.value = response.orderId
+        orderId.value = String(response.orderId)
         
         confirmModalVisible.value = false
         payModalVisible.value = true
@@ -320,7 +320,7 @@ const startPaymentProcess = () => {
 // 支付已完成按钮处理
 const handleConfirmPayment = () => {
     paymentStatus.value = 'processing'
-    changePayStatus()
+    changePayStatu()
     setTimeout(() => {
         paymentStatus.value = 'success'
         if (paymentTimer.value) {
@@ -331,7 +331,7 @@ const handleConfirmPayment = () => {
 }
 
 const changePayStatu = async () => {
-    await 
+    await orderApi.changePayStatus(BigInt(orderId.value),1)
 }
 
 // 取消支付处理
