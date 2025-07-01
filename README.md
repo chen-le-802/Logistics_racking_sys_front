@@ -1,33 +1,45 @@
-# Logistics_racking_sys_front
+# 物流追踪系统 - 前端
 
-This template should help get you started developing with Vue 3 in Vite.
+基于Vue 3 + typescript+ Vite的前端实现
 
-## Recommended IDE Setup
+## 环境要求
+- Node.js 16+
+- npm 8+
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## 快速开始
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+### 1. 安装依赖
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
+### 2. 启动开发服务器
+```bash
 npm run dev
 ```
+开发服务器默认运行在 `http://localhost:5173`
 
-### Type-Check, Compile and Minify for Production
-
-```sh
+### 3. 生产环境构建
+```bash
 npm run build
+```
+构建产物将输出至 `/dist` 目录
+
+## 开发指南
+
+### 项目结构
+```
+/src
+  /assets        # 静态资源
+  /components    # 公共组件
+  /views         # 页面视图
+  /router        # 路由配置
+  /store         # 状态管理
+  /api           # 接口服务
+  /utils         # 工具函数
+```
+
+## 常见问题
+- 如遇依赖安装问题，请尝试删除node_modules后重新安装
+- 跨域问题请配置vite代理
 ```
