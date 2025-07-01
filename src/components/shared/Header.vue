@@ -29,7 +29,7 @@
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item command="/">用户端</el-dropdown-item>
-                                <el-dropdown-item command="/admin">快递员端</el-dropdown-item>
+                                <el-dropdown-item command="/delivery">快递员端</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>

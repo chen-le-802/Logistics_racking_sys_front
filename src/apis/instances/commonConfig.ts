@@ -1,6 +1,7 @@
 import type { AxiosRequestConfig, AxiosResponse} from 'axios';
 import type { RequestInterceptor, ResponseInterceptor } from './types';
-import { ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus'
+
 
 //通用请求配置
 const commonRequestConfig: AxiosRequestConfig = {
@@ -52,7 +53,7 @@ const commonResponseInterceptors:ResponseInterceptor[]=[
             const { response } =error;
             let message = '';
             const status = response?.status;
-            if (status == 401) {
+            if (status == 401 || status === undefined) {
                 if (localStorage.getItem('token')) {
                     localStorage.removeItem('token')
                     window.location.reload()

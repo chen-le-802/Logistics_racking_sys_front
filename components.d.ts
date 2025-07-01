@@ -10,7 +10,9 @@ declare module 'vue' {
   export interface GlobalComponents {
     AddressBook: typeof import('./src/components/frontend/AddressBook.vue')['default']
     AddressForm: typeof import('./src/components/frontend/AddressForm.vue')['default']
+    ElAutocomplete: typeof import('element-plus/es')['ElAutocomplete']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCard: typeof import('element-plus/es')['ElCard']
     ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
     ElDescriptions: typeof import('element-plus/es')['ElDescriptions']
     ElDescriptionsItem: typeof import('element-plus/es')['ElDescriptionsItem']
@@ -26,18 +28,23 @@ declare module 'vue' {
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElResult: typeof import('element-plus/es')['ElResult']
     ElSelect: typeof import('element-plus/es')['ElSelect']
+    ElSkeleton: typeof import('element-plus/es')['ElSkeleton']
+    ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTag: typeof import('element-plus/es')['ElTag']
     Header: typeof import('./src/components/shared/Header.vue')['default']
     Login: typeof import('./src/components/shared/Login.vue')['default']
     MapContainner: typeof import('./src/components/shared/MapContainner.vue')['default']
-    OrderList: typeof import('./src/components/admin/OrderList.vue')['default']
+    OrderList: typeof import('./src/components/delivery/OrderList.vue')['default']
     Register: typeof import('./src/components/shared/Register.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchTable: typeof import('./src/components/frontend/SearchTable.vue')['default']
     Sidebar: typeof import('./src/components/shared/Sidebar.vue')['default']
     TitleBox: typeof import('./src/components/shared/TitleBox.vue')['default']
+  }
+  export interface GlobalDirectives {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

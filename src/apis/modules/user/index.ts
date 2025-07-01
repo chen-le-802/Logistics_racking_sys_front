@@ -12,7 +12,7 @@ import type {
 const { post, get } = userInstance;
 
 const login = (params: LoginParams) => {
-    return post<BaseResponse<LoginData>>('/login', params);
+    return post<LoginData>('/login', params);
 };
 
 const register = (params: RegisterParams) => {
@@ -32,4 +32,8 @@ const logout = (token: string) => {
     return post<BaseResponse<EmptyData>>(`/logout?token=${encodeURIComponent(token)}`);
 }
 
-export { login, getUserInfo, sendCode, register,logout };
+const getCourierById = (courierId: number) => {
+    return get<BaseResponse<UserInfoData>>(`/courier/${courierId}`);
+};
+
+export { login, getUserInfo, sendCode, register, logout, getCourierById };

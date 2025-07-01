@@ -1,6 +1,6 @@
 <template>
     <div class="home-view">
-       <Header></Header>
+       <Header theme="white-theme"></Header>
        <div class="w containner">
             <Sidebar :navList= navList></Sidebar>
            <router-view></router-view>

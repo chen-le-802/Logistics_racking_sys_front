@@ -22,9 +22,12 @@
                     <span class="label">角色：</span>
                     <span class="value">{{ displayRole }}</span>
                 </div>
-                <div style="margin-top:20px">
-                    <el-button type="primary" @click="startEditing" style="width:100px;align-self: center;margin-top: 30px;margin-right: 30px;">修改信息</el-button>
-                    <el-button type="danger" @click="confirmExitLogin" style="width:100px;align-self: center;margin-top: 30px;">退出登录</el-button>
+                <div style="margin-top:20px; display: flex; flex-direction: column; align-items: center;">
+                    <div style="display: flex; justify-content: center;">
+                        <el-button type="primary" @click="startEditing" style="width:100px; margin: 30px 30px 0 0;">修改信息</el-button>
+                        <el-button @click="openAddressDialog" style="width:100px; margin: 30px 0 0 0;">地址簿</el-button>
+                    </div>
+                    <el-button type="danger" @click="confirmExitLogin" style="width:100px; margin: 30px 0 0 0;">退出登录</el-button>
                 </div>
             </div>
             
@@ -89,12 +92,17 @@
                 <el-button type="primary" @click="handleConfirmDialog">确定</el-button>
             </template>
         </el-dialog>
+        <!-- 地址簿Dialog -->
+        <el-dialog v-model="addressDialogVisible" title="地址簿" width="80%" center>
+            <AddressBook />
+        </el-dialog>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref, computed, onMounted } from 'vue';
 import {userApi} from '@/apis/modules'
+import AddressForm from '@/components/frontend/AddressForm.vue'
 
 const title = '我的信息';
 const isEditing = ref(false);
@@ -124,6 +132,8 @@ const confirmDialog = reactive({
     content: '',
     action: '' as 'exit' | 'save' | ''
 });
+
+const addressDialogVisible = ref(false)
 
 const startEditing = () => {
     isEditing.value = true;
@@ -169,6 +179,9 @@ const handleConfirmDialog = () => {
     confirmDialog.visible = false;
 };
 
+const openAddressDialog = () => {
+    addressDialogVisible.value = true;
+}
 
 const fetchUserInfo = async () => {
     const response = await userApi.getUserInfo();

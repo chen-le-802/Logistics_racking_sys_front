@@ -99,11 +99,15 @@ async function sendCode() {
     ElMessage.error('请输入手机号')
     return
   }
+  if (isCountingDown.value) return // 防止重复点击
+  isCountingDown.value = true // 立即禁用按钮
   try {
     await userApi.sendCode(form.phone)
-    startCountdown()
+    ElMessage.success('验证码已发送')
   } catch {
     ElMessage.error('发送验证码失败')
+  } finally {
+    startCountdown() // 无论成功失败都进入倒计时
   }
 }
 
@@ -120,12 +124,13 @@ async function handleLogin() {
   try {
     const res = await userApi.login({ phone: form.phone, code: form.code })
     ElMessage.success('登录成功')
+    isCountingDown.value = true;
     setTimeout(() => {
       window.location.reload()
     }, 2000)
-    if (res.token) {
+    if (res) {
       localStorage.setItem('token', res.token)
-      localStorage.setItem('role', res.role)
+      localStorage.setItem('role', String(res.role))
       clearCountdown() // 登录成功后关闭定时器
     } else {
     }

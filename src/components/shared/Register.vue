@@ -90,6 +90,8 @@
 import { ref, reactive, onActivated, onBeforeUnmount } from 'vue'
 import { Iphone, Message, Key, Unlock } from '@element-plus/icons-vue'
 import { userApi } from '@/apis/modules'
+import { ElMessage } from 'element-plus'
+import type { FormRules } from 'element-plus'
 
 const form = reactive({
   phone: '',
@@ -196,7 +198,9 @@ async function handleRegister() {
       role: form.role,
       registryCode: form.role === 1 ? form.registryCode : undefined
     }
-    await userApi.register(requestData)
+    const res = await userApi.register(requestData)
+    if(res.code ===200){ElMessage.success('注册成功')}
+    
   } catch (err: any) {
 
   } finally {

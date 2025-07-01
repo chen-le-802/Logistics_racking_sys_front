@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import frontRoutes from './modules/frontend'
-import adminRoutes from './modules/admin'
+import deliveryRoutes from './modules/delivery'
 
 const routes:Array<RouteRecordRaw> = [
   ...frontRoutes,
-  ...adminRoutes
+  ...deliveryRoutes
 ]
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

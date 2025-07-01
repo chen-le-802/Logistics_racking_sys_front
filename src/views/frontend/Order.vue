@@ -92,7 +92,6 @@
     </div>
     <template #footer>
         <div style="display: flex; justify-content: center;">
-        价格：{{ fee }}元
         <el-button type="primary" style="margin:0 20px;" @click="submitOrder">确认下单</el-button>
         <el-button @click="confirmModalVisible = false">关闭</el-button>
     </div>
@@ -112,22 +111,17 @@
                 <h3>订单信息</h3>
                 <el-descriptions :column="1" border>
                     <el-descriptions-item label="订单号">{{ orderId }}</el-descriptions-item>
-                    <el-descriptions-item label="金额">
-                        <span class="payment-amount">¥{{ fee.toFixed(2) }}</span>
-                    </el-descriptions-item>
                 </el-descriptions>
             </div>
             
             <div class="payment-methods">
-                <h3>选择支付方式</h3>
-                <el-radio-group v-model="paymentMethod">
-                    <el-radio label="wechat" border>
-                        <img src="" alt="微信支付" class="payment-icon">
-                        微信支付
+                <h3 style="margin-bottom: 12px;">选择支付方式</h3>
+                <el-radio-group v-model="paymentMethod" class="pay-radio-group">
+                    <el-radio label="wechat" border class="pay-radio">
+                        <img src="@/assets/images/common/wechatPay.png" alt="微信支付" class="payment-icon" />
                     </el-radio>
-                    <el-radio label="alipay" border>
-                        <img src="" alt="支付宝" class="payment-icon">
-                        支付宝
+                    <el-radio label="alipay" border class="pay-radio">
+                        <img src="@/assets/images/common/zhifubao.png" alt="支付宝" class="payment-icon" />
                     </el-radio>
                 </el-radio-group>
             </div>
@@ -138,7 +132,7 @@
             </div>
             
             <div class="payment-qrcode" v-if="paymentStatus === 'ready'">
-                <img :src="qrcodeUrl" alt="支付二维码" class="qrcode-image">
+                <img src='@/assets/images/common/code.png' alt="支付二维码" class="qrcode-image">
                 <p>请使用{{ paymentMethod === 'wechat' ? '微信' : '支付宝' }}扫码支付</p>
             </div>
             
@@ -161,11 +155,19 @@
                     取消支付
                 </el-button>
                 <el-button 
+                    v-if="paymentStatus !== 'success'" 
                     type="primary" 
                     @click="handleConfirmPayment"
                     :loading="paymentStatus === 'processing'"
                 >
                     我已支付
+                </el-button>
+                <el-button 
+                    v-if="paymentStatus === 'success'" 
+                    type="primary" 
+                    @click="handlePaymentComplete"
+                >
+                    完成
                 </el-button>
             </div>
         </template>
@@ -180,14 +182,14 @@ import { orderApi } from '@/apis/modules'
 import { ElMessage } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
-import { load } from '@amap/amap-jsapi-loader'
+
 
 const goodsForm = reactive({
     type: null, // 货物类型：1-文件，2-包裹，3-大件
     weight: 0.1 // 设置默认值为0.1
 })
 
-const fee= ref(0)
+
 const senderForm = ref()
 const receiverForm = ref()
 const goodsRules = {
@@ -292,9 +294,7 @@ const submitOrder = async () => {
         }
         
         const response = await orderApi.addOrder(body)
-        fee.value = response.fee
-        orderId.value = String(response.orderId)
-        
+        orderId.value = response.orderId 
         confirmModalVisible.value = false
         payModalVisible.value = true
         startPaymentProcess()
@@ -311,8 +311,8 @@ const startPaymentProcess = () => {
     // 模拟生成支付二维码的过程
     setTimeout(() => {
         qrcodeUrl.value = paymentMethod.value === 'wechat' 
-            ? 'https://example.com/wechat-qrcode' 
-            : 'https://example.com/alipay-qrcode'
+            ? '@/assets/images/common/code.png' 
+            : '@/assets/images/common/code.png' 
         paymentStatus.value = 'ready'
     }, 1500)
 }
@@ -331,6 +331,7 @@ const handleConfirmPayment = () => {
 }
 
 const changePayStatu = async () => {
+    console.log(orderId.value)
     await orderApi.changePayStatus(orderId.value, 1)
 }
 
@@ -429,6 +430,10 @@ const handlePaymentComplete = () => {
 }
 
 .payment-qrcode {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     padding: 20px 0;
 }
@@ -446,5 +451,9 @@ const handlePaymentComplete = () => {
 
 .payment-success {
     padding: 20px 0;
+}
+.pay-radio{
+    display: flex !important;
+    flex-wrap: nowrap;
 }
 </style>

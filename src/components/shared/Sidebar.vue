@@ -43,7 +43,6 @@ const icons: Record<string, any> = {
 </script>
 
 <style scoped lang="css">
-
 .sidebar{
     width:275px;
     height: calc(100vh - 60px);

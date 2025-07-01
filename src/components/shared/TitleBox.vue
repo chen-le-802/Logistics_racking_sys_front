@@ -10,11 +10,12 @@ const { title } = defineProps<{
 .title-box{
     height: 60px;
     border-radius: 10px;
-    margin-top: 30px;
+    margin-top: 20px;
     display: flex;
     align-items: center;
     font-size: 20px;
     text-indent: 1em;
     background-color: #fff;
+    
 }
 </style>
